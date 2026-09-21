@@ -18,6 +18,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: orgguard
 
     steps:
       - name: Checkout
@@ -33,13 +36,13 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          cache-dependency-path: orgguard/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build website
-        run: pnpm run build
+        run: pnpm run build:client
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
@@ -47,7 +50,7 @@ jobs:
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/public
+          path: orgguard/dist/public
 
   deploy:
     environment:
